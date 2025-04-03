@@ -10,8 +10,11 @@ export default function Header() {
       <div className="App-Header-Links">
         <Link to="products" className="App-Header-Link">Home</Link>
         <Link to="cart" className="App-Header-Link">Cart</Link>
+        <Link to="orders" className="App-Header-Link">Orders</Link>
         {user.name == "" ? (<Link to="login" className="App-Header-Link">Login</Link>):
         (<Link to="login" className="App-Header-Link" onClick={()=> setUser({...user,name:"",email:"",password:""})}>Logout</Link>)}
+        
+        
       </div>
     </div>
   );

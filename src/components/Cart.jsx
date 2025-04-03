@@ -2,10 +2,13 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { appContext } from "../App";
 import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import Orders from "./Orders";
 export default function Cart() {
-  const { cart, setCart, products } = useContext(appContext);
-  
-  const [orderValue, setOrderValue] = useState(0);
+  const { cart, setCart, products,user,orders,setOrders } = useContext(appContext);
+ 
+  const [orderValue, setOrderValue] = useState(0); 
+  const navi = useNavigate();
   const handleDelete = (id) => {
     setCart({ ...cart, [id]: 0 });
   };
@@ -14,6 +17,17 @@ export default function Cart() {
   }
   const decrement=(id)=>{
     setCart({...cart,[id]:cart[id]-1})
+  }
+  const placeOrder =()=>{
+    setOrders([...orders,
+      {orderDate:Date(),
+        email: user.email,
+        items : cart,
+        total : orderValue,
+        status : "pending"
+      },]);
+      setCart({});  
+      navi("/orders")
   }
   useEffect(()=>{
     setOrderValue(products.reduce((total,value)=>{
@@ -32,8 +46,15 @@ export default function Cart() {
             </div>
           )
       )}
+      
     <hr></hr>
-    <div><h3>Order Value :{orderValue}</h3></div>
+    <p>
+        {user.email ? (
+          <button onClick={placeOrder}>Place Order</button>
+        ) : (
+          <button onClick={()=>navi("/login")}>Login to Order</button>
+        )}
+      </p>
     </div>
   );
 }
